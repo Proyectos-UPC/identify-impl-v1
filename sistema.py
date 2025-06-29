@@ -11,7 +11,7 @@ class SistemaBiometrico:
         cliente = Cliente(cliente_nombre)
         tipo = input("Tipo (Reniec, Equifax, Liveness): ")
         reintentos = int(input("Número de reintentos (1-4): "))
-        validaciones = input("Validaciones requeridas (documento, cara, informacion): ").split(',')
+        validaciones = input("Validación requerida (documento, cara, informacion): ")
 
         if tipo == "Reniec":
             proceso = ProcesoReniec(cliente, tipo, reintentos, validaciones)
@@ -25,6 +25,25 @@ class SistemaBiometrico:
 
     def resolver_proceso(self):
         pid = input("Ingrese el ID del proceso: ")
+        for p in self.__procesos:
+            if p.get_id() == pid:
+                if p.get_validacion() == "informacion":
+                    dni = input("DNI: ")
+                    nombre = input("Primer Nombre: ")
+                    input("Segundo Nombre: ")
+                    input("Primer Apellido: ")
+                    input("Segundo Apellido: ")
+                    p.resolver(dni, nombre)
+                elif p.get_validacion() == "cara":
+                    dni = input("DNI: ")
+                    cara = input("Ingrese rostro en base64: ")
+                    p.resolver(dni, cara)
+                elif p.get_validacion() == "documento":
+                    dni = input("DNI: ")
+                    docu = input("Ingrese foto del documento en base64: ")
+                    p.resolver(dni, docu)
+                print("Proceso resuelto.")
+                return
         print("ID no encontrado.")
 
     def listar_transacciones(self):

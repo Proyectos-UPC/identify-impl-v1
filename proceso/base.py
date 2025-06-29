@@ -29,10 +29,17 @@ class ProcesoBiometrico(ABC):
     def get_tipo(self):
         return self._tipo
 
+    def get_resuelto(self):
+        return self._resuelto
+
+    def get_validacion(self):
+        return self._validaciones
+
     @abstractmethod
     def calcular_costo(self):
         pass
 
     def __str__(self):
         estado = "Pagado" if self._pagado else "Pendiente"
-        return f"ID: {self._id} | Cliente: {self._cliente} | Tipo: {self._tipo} | Reintentos: {self._reintentos} | Validaciones: {self._validaciones} | Costo: S/ {self.calcular_costo()} | Estado: {estado}"
+        resuelto = "Sí" if self._resuelto else "No"
+        return f"ID: {self._id} | Resuelto: {resuelto} | Cliente: {self._cliente} | Tipo: {self._tipo} | Reintentos: {self._reintentos} | Validación: {self._validaciones} | Costo: S/ {self.calcular_costo()} | Estado: {estado}"

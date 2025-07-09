@@ -48,6 +48,10 @@ class SistemaBiometrico:
 
     def listar_transacciones(self):
         total = 0
+        for p in self.__procesos:
+            print(p)
+            if not p.esta_pagado():
+                total += p.calcular_costo()
         print(f"Total a pagar: S/ {round(total, 2)}")
 
     def pagar_todo(self):

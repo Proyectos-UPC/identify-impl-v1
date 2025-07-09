@@ -55,10 +55,21 @@ class SistemaBiometrico:
         print(f"Total a pagar: S/ {round(total, 2)}")
 
     def pagar_todo(self):
+        for p in self.__procesos:
+            if not p.esta_pagado():
+                p.marcar_pagado()
         print("Todas las transacciones han sido pagadas.")
 
     def pagar_individual(self):
         pid = input("Ingrese el ID del proceso a pagar: ")
+        for p in self.__procesos:
+            if p.get_id() == pid:
+                if not p.esta_pagado():
+                    p.marcar_pagado()
+                    print("Proceso pagado.")
+                else:
+                    print("Ya está pagado.")
+                return
         print("ID no encontrado.")
 
     def listar_procesos(self):

@@ -11,8 +11,9 @@ class ProcesoBiometrico(ABC):
         self._resuelto = False
         self._pagado = False
 
-    def resolver(self, dni, primer_nombre):
-        self._resuelto = True
+    @abstractmethod
+    def resolver(self, dni: str):
+        pass
 
     def marcar_pagado(self):
         self._pagado = True

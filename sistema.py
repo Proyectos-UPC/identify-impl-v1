@@ -2,8 +2,8 @@ from cliente import Cliente
 from proceso.reniec import ProcesoReniec
 from proceso.equifax import ProcesoEquifax
 from proceso.liveness import ProcesoLiveness
-from constants.reniec_db import RENIEC_DB
-from constants.equifax_db import EQUIFAX_DB
+from proceso.constants.reniec_db import RENIEC_DB
+from proceso.constants.equifax_db import EQUIFAX_DB
 
 class SistemaBiometrico:
     def __init__(self):
@@ -31,35 +31,22 @@ class SistemaBiometrico:
         for p in self.__procesos:
             if p.get_id() == pid:
                 dni = input("DNI: ")
-
-                # Buscar tipo de proceso
-                tipo = p.get_tipo()
-
-                # Simulación de búsquedas externas
-                datos_reniec = RENIEC_DB.get(dni) if tipo == "Reniec" else None
-                datos_equifax = EQUIFAX_DB.get(dni) if tipo == "Equifax" else None
-
+                # Para Reniec y Equifax, pasar dato externo (nombre o base64)
                 if p.get_validacion() == "informacion":
-                    if tipo == "Reniec" and datos_reniec:
-                        p.resolver(dni, datos_reniec["nombre"])
-                    elif tipo == "Equifax" and datos_equifax:
-                        p.resolver(dni, datos_equifax["nombre"])
+                    nombre = input("Ingrese nombre: ")
+                    if p.get_tipo() in ["Reniec", "Liveness"]:
+                        apellido = input("Ingrese apellido: ")
+                        p.resolver(dni, f"{nombre} {apellido}")
                     else:
-                        print("Datos no encontrados en base externa.")
-                        return
+                        p.resolver(dni, nombre)
 
-                elif p.get_validacion() == "cara":
-                    cara = input("Ingrese rostro en base64: ")
-                    p.resolver(dni, cara)
-
-                elif p.get_validacion() == "documento":
-                    docu = input("Ingrese foto del documento en base64: ")
-                    p.resolver(dni, docu)
+                elif p.get_validacion() in ["cara", "documento"]:
+                    dato = input(f"Ingrese {p.get_validacion()} en base64: ")
+                    p.resolver(dni, dato)
 
                 print("Proceso resuelto.")
                 return
         print("ID no encontrado.")
-
 
     def listar_transacciones(self):
         total = 0

@@ -2,7 +2,7 @@ from sistema import SistemaBiometrico
 
 def ejecutar_menu():
     sistema = SistemaBiometrico()
-    print("\nBienvenido a Identia")
+    print("\nBienvenido a Identify")
     while True:
         print("\n1. Solicitar un proceso biométrico")
         print("2. Resolver proceso biométrico")
@@ -30,7 +30,7 @@ def ejecutar_menu():
         elif opcion == "4":
             sistema.listar_procesos()
         elif opcion == "5":
-            print("Gracias por usar Identia. Hasta pronto!")
+            print("Gracias por usar Identify. Hasta pronto!")
             break
         else:
             print("Opción inválida. Intente nuevamente.")

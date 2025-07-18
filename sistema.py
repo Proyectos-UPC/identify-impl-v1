@@ -2,6 +2,9 @@ from cliente import Cliente
 from proceso.reniec import ProcesoReniec
 from proceso.equifax import ProcesoEquifax
 from proceso.liveness import ProcesoLiveness
+from constants.reniec_db import RENIEC_DB
+from constants.equifax_db import EQUIFAX_DB
+
 class SistemaBiometrico:
     def __init__(self):
         self.__procesos = []
@@ -27,24 +30,36 @@ class SistemaBiometrico:
         pid = input("Ingrese el ID del proceso: ")
         for p in self.__procesos:
             if p.get_id() == pid:
+                dni = input("DNI: ")
+
+                # Buscar tipo de proceso
+                tipo = p.get_tipo()
+
+                # Simulación de búsquedas externas
+                datos_reniec = RENIEC_DB.get(dni) if tipo == "Reniec" else None
+                datos_equifax = EQUIFAX_DB.get(dni) if tipo == "Equifax" else None
+
                 if p.get_validacion() == "informacion":
-                    dni = input("DNI: ")
-                    nombre = input("Primer Nombre: ")
-                    input("Segundo Nombre: ")
-                    input("Primer Apellido: ")
-                    input("Segundo Apellido: ")
-                    p.resolver(dni, nombre)
+                    if tipo == "Reniec" and datos_reniec:
+                        p.resolver(dni, datos_reniec["nombre"])
+                    elif tipo == "Equifax" and datos_equifax:
+                        p.resolver(dni, datos_equifax["nombre"])
+                    else:
+                        print("Datos no encontrados en base externa.")
+                        return
+
                 elif p.get_validacion() == "cara":
-                    dni = input("DNI: ")
                     cara = input("Ingrese rostro en base64: ")
                     p.resolver(dni, cara)
+
                 elif p.get_validacion() == "documento":
-                    dni = input("DNI: ")
                     docu = input("Ingrese foto del documento en base64: ")
                     p.resolver(dni, docu)
+
                 print("Proceso resuelto.")
                 return
         print("ID no encontrado.")
+
 
     def listar_transacciones(self):
         total = 0
